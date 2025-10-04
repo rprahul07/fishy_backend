@@ -4,10 +4,11 @@ import { Customer } from './Customer.js';
 
 export const OTP = sequelize.define('OTP', {
   code: { type: DataTypes.STRING(6), allowNull: false },
+  phoneNumber: { type: DataTypes.STRING, allowNull: false }, // store phone number directly
   expiresAt: { type: DataTypes.DATE, allowNull: false },
   used: { type: DataTypes.BOOLEAN, defaultValue: false }
 }, { timestamps: true });
 
-// Association
+// Association (optional - customer may not exist yet)
 Customer.hasMany(OTP);
-OTP.belongsTo(Customer);
+OTP.belongsTo(Customer, { foreignKey: { allowNull: true } });

@@ -1,0 +1,616 @@
+{
+	"info": {
+		"_postman_id": "fishy-api-collection",
+		"name": "Fishy API - Complete Collection",
+		"description": "Complete API collection for Fishy Backend with all routes",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"variable": [
+		{
+			"key": "base_url",
+			"value": "http://localhost:3000",
+			"type": "string"
+		}
+	],
+	"item": [
+		{
+			"name": "Health Check",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/",
+					"host": ["{{base_url}}"],
+					"path": [""]
+				},
+				"description": "Check if API is running"
+			}
+		},
+		{
+			"name": "Authentication Flow (OTP-Based)",
+			"item": [
+				{
+					"name": "STEP 1 - Request OTP",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"phoneNumber\": \"9876543210\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/auth/request-otp",
+							"host": ["{{base_url}}"],
+							"path": ["api", "auth", "request-otp"]
+						},
+						"description": "Step 1: User provides phone number and receives OTP"
+					}
+				},
+				{
+					"name": "STEP 2 - Verify OTP",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"phoneNumber\": \"9876543210\",\n  \"code\": \"123456\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/auth/verify-otp",
+							"host": ["{{base_url}}"],
+							"path": ["api", "auth", "verify-otp"]
+						},
+						"description": "Step 2: Verify the OTP code sent to phone"
+					}
+				},
+				{
+					"name": "STEP 3 - Complete Profile",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"phoneNumber\": \"9876543210\",\n  \"name\": \"John Doe\",\n  \"address\": \"123 Main Street, City\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/auth/complete-profile",
+							"host": ["{{base_url}}"],
+							"path": ["api", "auth", "complete-profile"]
+						},
+						"description": "Step 3: Complete profile with name and address after OTP verification"
+					}
+				},
+				{
+					"name": "Resend OTP",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"phoneNumber\": \"9876543210\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/auth/resend-otp",
+							"host": ["{{base_url}}"],
+							"path": ["api", "auth", "resend-otp"]
+						},
+						"description": "Resend OTP if expired or not received"
+					}
+				}
+			]
+		},
+		{
+			"name": "Public Routes",
+			"item": [
+				{
+					"name": "Get All Fish (Public)",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/public/fish",
+							"host": ["{{base_url}}"],
+							"path": ["api", "public", "fish"]
+						}
+					}
+				},
+				{
+					"name": "Get Fish By ID (Public)",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/public/fish/1",
+							"host": ["{{base_url}}"],
+							"path": ["api", "public", "fish", "1"]
+						}
+					}
+				},
+				{
+					"name": "Create Customer (Public)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"John Doe\",\n  \"phoneNumber\": \"9876543210\",\n  \"address\": \"123 Main Street, City\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/public/customer",
+							"host": ["{{base_url}}"],
+							"path": ["api", "public", "customer"]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "Private/Admin Routes",
+			"item": [
+				{
+					"name": "Add Fish (Admin)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer YOUR_ADMIN_TOKEN",
+								"description": "Admin authentication token"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"Salmon\",\n  \"imageURL\": \"https://example.com/salmon.jpg\",\n  \"price\": 500,\n  \"weight\": 2.5\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/private/admin/fish",
+							"host": ["{{base_url}}"],
+							"path": ["api", "private", "admin", "fish"]
+						}
+					}
+				},
+				{
+					"name": "Delete Fish (Admin)",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer YOUR_ADMIN_TOKEN",
+								"description": "Admin authentication token"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/private/admin/fish/1",
+							"host": ["{{base_url}}"],
+							"path": ["api", "private", "admin", "fish", "1"]
+						}
+					}
+				},
+				{
+					"name": "Get All Customers (Admin)",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer YOUR_ADMIN_TOKEN",
+								"description": "Admin authentication token"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/private/admin/customers",
+							"host": ["{{base_url}}"],
+							"path": ["api", "private", "admin", "customers"]
+						}
+					}
+				},
+				{
+					"name": "Delete Customer (Admin)",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer YOUR_ADMIN_TOKEN",
+								"description": "Admin authentication token"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/private/admin/customer/1",
+							"host": ["{{base_url}}"],
+							"path": ["api", "private", "admin", "customer", "1"]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "Customer Routes",
+			"item": [
+				{
+					"name": "Create Customer",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"Jane Smith\",\n  \"phoneNumber\": \"9123456789\",\n  \"address\": \"456 Park Avenue, Town\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/customers",
+							"host": ["{{base_url}}"],
+							"path": ["api", "customers"]
+						}
+					}
+				},
+				{
+					"name": "Get All Customers",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/customers",
+							"host": ["{{base_url}}"],
+							"path": ["api", "customers"]
+						}
+					}
+				},
+				{
+					"name": "Get Customer By ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/customers/1",
+							"host": ["{{base_url}}"],
+							"path": ["api", "customers", "1"]
+						}
+					}
+				},
+				{
+					"name": "Update Customer",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"Jane Smith Updated\",\n  \"phoneNumber\": \"9123456789\",\n  \"address\": \"789 New Street, City\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/customers/1",
+							"host": ["{{base_url}}"],
+							"path": ["api", "customers", "1"]
+						}
+					}
+				},
+				{
+					"name": "Delete Customer",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/customers/1",
+							"host": ["{{base_url}}"],
+							"path": ["api", "customers", "1"]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "Fish Routes",
+			"item": [
+				{
+					"name": "Create Fish",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"Tuna\",\n  \"imageURL\": \"https://example.com/tuna.jpg\",\n  \"price\": 600,\n  \"weight\": 3.0\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/fish",
+							"host": ["{{base_url}}"],
+							"path": ["api", "fish"]
+						}
+					}
+				},
+				{
+					"name": "Get All Fish",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/fish",
+							"host": ["{{base_url}}"],
+							"path": ["api", "fish"]
+						}
+					}
+				},
+				{
+					"name": "Get Fish By ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/fish/1",
+							"host": ["{{base_url}}"],
+							"path": ["api", "fish", "1"]
+						}
+					}
+				},
+				{
+					"name": "Update Fish",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"Tuna Premium\",\n  \"imageURL\": \"https://example.com/tuna-premium.jpg\",\n  \"price\": 700,\n  \"weight\": 3.5\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/fish/1",
+							"host": ["{{base_url}}"],
+							"path": ["api", "fish", "1"]
+						}
+					}
+				},
+				{
+					"name": "Delete Fish",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/fish/1",
+							"host": ["{{base_url}}"],
+							"path": ["api", "fish", "1"]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "Order Routes",
+			"item": [
+				{
+					"name": "Create Order",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"customerId\": 1,\n  \"fishId\": 1,\n  \"quantity\": 2\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/orders",
+							"host": ["{{base_url}}"],
+							"path": ["api", "orders"]
+						}
+					}
+				},
+				{
+					"name": "Get All Orders",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/orders",
+							"host": ["{{base_url}}"],
+							"path": ["api", "orders"]
+						}
+					}
+				},
+				{
+					"name": "Get Orders By Customer ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/orders/customer/1",
+							"host": ["{{base_url}}"],
+							"path": ["api", "orders", "customer", "1"]
+						},
+						"description": "Get all orders for a specific customer by customer ID"
+					}
+				},
+				{
+					"name": "Get Orders By Phone Number",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/orders/phone/9876543210",
+							"host": ["{{base_url}}"],
+							"path": ["api", "orders", "phone", "9876543210"]
+						},
+						"description": "Get all orders for a customer by their phone number"
+					}
+				},
+				{
+					"name": "Get Order By ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/orders/1",
+							"host": ["{{base_url}}"],
+							"path": ["api", "orders", "1"]
+						}
+					}
+				},
+				{
+					"name": "Update Order",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"customerId\": 1,\n  \"fishId\": 1,\n  \"quantity\": 5\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/orders/1",
+							"host": ["{{base_url}}"],
+							"path": ["api", "orders", "1"]
+						}
+					}
+				},
+				{
+					"name": "Delete Order",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/orders/1",
+							"host": ["{{base_url}}"],
+							"path": ["api", "orders", "1"]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "OTP Routes",
+			"item": [
+				{
+					"name": "Generate OTP",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"customerId\": 1\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/otp/generate",
+							"host": ["{{base_url}}"],
+							"path": ["api", "otp", "generate"]
+						}
+					}
+				},
+				{
+					"name": "Verify OTP",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"customerId\": 1,\n  \"code\": \"123456\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/otp/verify",
+							"host": ["{{base_url}}"],
+							"path": ["api", "otp", "verify"]
+						}
+					}
+				},
+				{
+					"name": "Get All OTPs",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/otp",
+							"host": ["{{base_url}}"],
+							"path": ["api", "otp"]
+						}
+					}
+				},
+				{
+					"name": "Get OTP By ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/otp/1",
+							"host": ["{{base_url}}"],
+							"path": ["api", "otp", "1"]
+						}
+					}
+				},
+				{
+					"name": "Delete OTP",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/otp/1",
+							"host": ["{{base_url}}"],
+							"path": ["api", "otp", "1"]
+						}
+					}
+				}
+			]
+		}
+	]
+}

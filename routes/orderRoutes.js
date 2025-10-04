@@ -4,7 +4,9 @@ import {
   getOrders,
   getOrderById,
   updateOrder,
-  deleteOrder
+  deleteOrder,
+  getOrdersByCustomer,
+  getOrdersByPhone
 } from '../controllers/orderController.js';
 
 const router = express.Router();
@@ -15,7 +17,13 @@ router.post('/', createOrder);
 // READ ALL
 router.get('/', getOrders);
 
-// READ BY ID
+// GET ORDERS BY CUSTOMER ID
+router.get('/customer/:customerId', getOrdersByCustomer);
+
+// GET ORDERS BY PHONE NUMBER
+router.get('/phone/:phoneNumber', getOrdersByPhone);
+
+// READ BY ID (must be after specific routes to avoid conflicts)
 router.get('/:id', getOrderById);
 
 // UPDATE
