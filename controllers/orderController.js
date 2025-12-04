@@ -16,7 +16,13 @@ export const createOrder = async (req, res) => {
     if (!customer || !fish)
       return res.status(404).json({ success: false, message: 'Customer or Fish not found.' });
 
-    const order = await Order.create({ customerId, fishId, quantity });
+    // ✅ FIXED COLUMN NAMES
+    const order = await Order.create({
+      CustomerId: customerId,
+      FishId: fishId,
+      quantity,
+    });
+
     res.status(201).json({ success: true, data: order });
   } catch (error) {
     console.error('❌ Create Order Error:', error);
@@ -79,75 +85,62 @@ export const deleteOrder = async (req, res) => {
   }
 };
 
-// GET ORDERS BY CUSTOMER (User's Orders)
+// GET ORDERS BY CUSTOMER
 export const getOrdersByCustomer = async (req, res) => {
   try {
     const { customerId } = req.params;
 
-    // Verify customer exists
     const customer = await Customer.findByPk(customerId);
     if (!customer)
       return res.status(404).json({ success: false, message: 'Customer not found.' });
 
-    // Get all orders for this customer with fish details
-    const orders = await Order.findAll({ 
-      where: { customerId },
+    const orders = await Order.findAll({
+      where: { CustomerId: customerId },  // ✅ FIXED
       include: [
-        {
-          model: Fish,
-          attributes: ['id', 'name', 'imageURL', 'price', 'weight']
-        },
-        {
-          model: Customer,
-          attributes: ['id', 'name', 'phoneNumber', 'address']
-        }
+        { model: Fish },
+        { model: Customer },
       ],
-      order: [['createdAt', 'DESC']] // Most recent orders first
+      order: [['createdAt', 'DESC']],
     });
 
-    res.status(200).json({ 
-      success: true, 
+    res.status(200).json({
+      success: true,
       count: orders.length,
-      data: orders 
+      data: orders,
     });
+
   } catch (error) {
     console.error('❌ Get Orders By Customer Error:', error);
     res.status(500).json({ success: false, message: 'Internal server error.' });
   }
 };
 
-// GET ORDERS BY PHONE NUMBER (Alternative method)
+// GET ORDERS BY PHONE NUMBER
 export const getOrdersByPhone = async (req, res) => {
   try {
     const { phoneNumber } = req.params;
 
-    // Find customer by phone number
     const customer = await Customer.findOne({ where: { phoneNumber } });
     if (!customer)
-      return res.status(404).json({ success: false, message: 'Customer not found with this phone number.' });
+      return res.status(404).json({ success: false, message: 'Customer not found.' });
 
-    // Get all orders for this customer
-    const orders = await Order.findAll({ 
-      where: { customerId: customer.id },
-      include: [
-        {
-          model: Fish,
-          attributes: ['id', 'name', 'imageURL', 'price', 'weight']
-        }
-      ],
-      order: [['createdAt', 'DESC']]
+    const orders = await Order.findAll({
+      where: { CustomerId: customer.id },  // ✅ FIXED
+      include: [Fish],
+      order: [['createdAt', 'DESC']],
     });
 
-    res.status(200).json({ 
-      success: true, 
+    res.status(200).json({
+      success: true,
       customer: {
         id: customer.id,
         name: customer.name,
-        phoneNumber: customer.phoneNumber
+        phoneNumber: customer.phoneNumber,
       },
       count: orders.length,
-      data: orders 
+      data: orders,
     });
+
   } catch (error) {
     console.error('❌ Get Orders By Phone Error:', error);
     res.status(500).json({ success: false, message: 'Internal server error.' });
