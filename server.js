@@ -7,6 +7,7 @@ import customerRoutes from './routes/customerRoutes.js';
 import fishRoutes from './routes/fishRoutes.js';
 import orderRoutes from './routes/orderRoutes.js';
 import otpRoutes from './routes/otpRoutes.js';
+import collaboratorRoutes from './routes/collaboratorRoutes.js';
 
 const app = express();
 const port = 3000;
@@ -25,6 +26,7 @@ app.use('/api/customers', customerRoutes);
 app.use('/api/fish', fishRoutes);
 app.use('/api/orders', orderRoutes);
 app.use('/api/otp', otpRoutes);
+app.use('/api/collaborators', collaboratorRoutes);
 
 // Error handling middleware (catch all)
 app.use((err, req, res, next) => {
