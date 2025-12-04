@@ -85,7 +85,16 @@ export const updateCollaborator = async (req, res) => {
     if (!collaborator)
       return res.status(404).json({ success: false, message: 'Collaborator not found.' });
 
-    await collaborator.update(req.body);
+    // Whitelist of allowed fields for update
+    const { name, email, phoneNumber, role, isActive } = req.body;
+    const updateData = {};
+    if (name !== undefined) updateData.name = name;
+    if (email !== undefined) updateData.email = email;
+    if (phoneNumber !== undefined) updateData.phoneNumber = phoneNumber;
+    if (role !== undefined) updateData.role = role;
+    if (isActive !== undefined) updateData.isActive = isActive;
+
+    await collaborator.update(updateData);
     res.status(200).json({ success: true, message: 'Collaborator updated.', data: collaborator });
   } catch (error) {
     console.error('❌ Update Collaborator Error:', error);
