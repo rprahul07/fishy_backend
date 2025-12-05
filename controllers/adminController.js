@@ -12,15 +12,7 @@ export const adminController = {
     }
   },
 
-  // Get all customers
-  async getAllCustomers(req, res) {
-    try {
-      const customers = await Customer.findAll();
-      res.json({ success: true, customers });
-    } catch (error) {
-      res.status(500).json({ success: false, error: error.message });
-    }
-  },
+  
 
   // Delete a customer
   async deleteCustomer(req, res) {
